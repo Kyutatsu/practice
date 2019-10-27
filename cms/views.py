@@ -1,3 +1,45 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
 
-# Create your views here.
+from cms.models import Book, Impression
+from cms.forms import BookForm
+
+
+def book_list(request):
+    """書籍の一覧"""
+    books = Book.objects.all().order_by('id')
+    return render(request,
+                  'cms/book_list.html',
+                  {'books': books})
+
+
+def book_edit(request, book_id=None):
+    """書籍の編集"""
+    if book_id:
+        book = get_object_or_404(Book, pk=book_id)
+    else:
+        book = Book()
+
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            # (質問)直接保存しない意図は？
+            book = form.save(commit=False)
+            book.save()
+            return redirect('cms:book_list')
+    else:
+        form = BookForm(instance=book)
+
+    return render(request,
+                  'cms/book_edit.html',
+                  # book_id、edit時のためにそのままtemplateへ返してる。
+                  # 編集を埋めでやるのではなく、formのactionのリンクをmod/add分岐させてる。
+                  dict(form=form, book_id=book_id),
+    )
+
+
+def book_del(request, book_id):
+    """書籍の削除"""
+    book = get_object_or_404(Book, pk=book_id)
+    book.delete()
+    return redirect('cms:book_list')
