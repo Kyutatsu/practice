@@ -23,7 +23,7 @@ def book_list(request):
     books = []
     for book in Book.objects.all().order_by('id'):
         impressions = []
-        # ↓でQuerySet取れる。Impresson.objects.filter(book_id=book.id)とせんでええんやな。
+        # ↓でQuerySet取れる。Impression.objects.filter(book_id=book.id)とせんでええんやな。
         for impression in book.impressions.order_by('id'):
             temp_impression_info_dict = OrderedDict([
                 ('id', impression.id),

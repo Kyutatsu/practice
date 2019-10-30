@@ -20,7 +20,11 @@
                 <td>{{ impression.comment|linebreaksbr }}</td>
                 <td>
                     <a href="{% url 'cms:impression_mod' book_id=book.id impression_id=impression.id %}" class="btn btn-outline-primary btn-sm">修正</a>
-                    <button type="button" class="btn btn-outline-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" data-pk="{{ impression.id }}" data-url="{% url 'cms:impression_del' book_id=book.id impression_id=impression.id %}">削除</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm del_confirm"
+                            data-toggle="modal" data-target="#deleteModal" data-pk="{{ impression.id }}"
+                            data-url="{% url 'cms:impression_del' book_id=book.id impression_id=impression.id %}">
+                        削除
+                    </button>
                 </td>
             </tr>
         {% endfor %}
